@@ -7,7 +7,7 @@ exports.follow = async (req, res, next) => {
       await user.addFollowing(parseInt(req.params.id, 10));
       res.send("success");
     } else {
-      res.stats(404).send("no user");
+      res.status(404).send("no user");
     }
   } catch (error) {
     console.error(error);

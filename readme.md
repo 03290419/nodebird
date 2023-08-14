@@ -55,3 +55,8 @@ as 옵션으로 두 모델을 구분한다. as 는 foreignKey와 반대되는 �
 
 `passport-local`: passport-local 모듈에서 Strategy 생성자를 불러와 그 안에 전략을 구현한다. **생성자의 첫 번째 인수로 주어진 객체**는 전략에 관한 설정을 하는 곳이다. `usernameField`와 `passwordField`에는 일치하는 로그인 라우터의 `req.body` 속성명을 적으면 된다.
 **생성자의 두 번째 인수는** 실제 전략을 실행하는 `async함수`이다. 첫 번째 인수에서 넣어준 usernameField와 passwordField의 값은 각각 async 함수의 첫 번째와 두 번째 매개변수가된다. 세 번째 매개변수인 done 함수는 `passport.authenticate`의 콜백함수이다.
+
+# 컨트롤러와 서비스 분리
+
+`서비스는 익스프레스의 req, res, next에 관해 알지 못한다.` 반대로 `컨트롤러는 User와 같은 모델에 대해 알지 못한다.`
+이와 같은 원칙으로 분리하면 된다.
