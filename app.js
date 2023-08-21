@@ -69,6 +69,4 @@ app.use((err, req, res, next) => {
   res.render("error");
 });
 
-app.listen(app.get("port"), () => {
-  console.log(`🦻.... http://localhost:${app.get("port")}`);
-});
+module.exports = app;

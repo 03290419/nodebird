@@ -60,3 +60,45 @@ as 옵션으로 두 모델을 구분한다. as 는 foreignKey와 반대되는 �
 
 `서비스는 익스프레스의 req, res, next에 관해 알지 못한다.` 반대로 `컨트롤러는 User와 같은 모델에 대해 알지 못한다.`
 이와 같은 원칙으로 분리하면 된다.
+
+# 통합 테스트
+
+라우터 하나에는 여러 개의 미들웨어가 붙어 있고 다양한 라이브러리가 사용된다. 이런 것들이 모두 유기적으로 잘 작동하는지 테스트하는 것이 통합 테스트(integration test)이다.
+
+통합 테스트에서는 데이터베이스 코드를 모킹하지 않으므로 데이터베이스에 실제로 테스트용 데이터가 저장된다. 때문에 테스트용 데이터베이스를 설정한다.
+
+```js
+// config/config.js
+...
+  test: {
+    username: "root",
+    password: process.env.MYSQL_ROOT_PASSWORD,
+    database: "nodebird_test",
+    host: "127.0.0.1",
+    dialect: "mysql",
+  },
+...
+```
+
+```bash
+npx sequelize db:create --env test
+```
+
+통합 테스트 예제
+
+```js
+describe("POST /login", () => {
+  test("로그인 수행", (done) => {
+    request(app)
+      .post("/auth/login")
+      .send({
+        email: "batkeng@gmail.com",
+        password: "nodejsbook",
+      })
+      .expect("Location", "/")
+      .expect(302, done);
+  });
+});
+```
+
+supertest 패키지로부터 request 함수를 불러와서 app 객체를 인수로 넣는다. 여기에 get, post, put, patch, delete 등의 메서드로 원하는 라우터에 요청을 보낼 수 있다. 데이터는 send 메서드에 담아서 보낸다. request 함수는 비동기 함수이므로 jest가 테스트가 언제 종료되는지 스스로 판단하기 어렵기 때문에 test 함수의 콜백 함수의 매개변수인 done을 expect 메서드의 두 번째 인수로 넣어서 테스트가 마무리 되었음을 알려야한다.

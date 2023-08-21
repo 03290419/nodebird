@@ -5,7 +5,6 @@ const User = require("../models/user");
 exports.join = async (req, res, next) => {
   const { email, nick, password } = req.body;
   try {
-    console.log("디비 뒤질 데이터 이메일", email);
     const existUser = await User.findOne({ where: { email } });
     if (existUser) {
       return res.redirect("/join?error=exist");

@@ -12,8 +12,8 @@ module.exports = {
   },
   test: {
     username: "root",
-    password: null,
-    database: "database_test",
+    password: process.env.MYSQL_ROOT_PASSWORD,
+    database: "nodebird_test",
     host: "127.0.0.1",
     dialect: "mysql",
   },
